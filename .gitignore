@@ -3,6 +3,16 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Django
+*.log
+*.pot
+db.sqlite3
+media
+
+# PDM
+.pdm.toml
+__pypackages__/
+
 # C extensions
 *.so
 
