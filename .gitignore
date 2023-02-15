@@ -132,3 +132,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+sf_cpanel/scratchorgs/auth_url.py
