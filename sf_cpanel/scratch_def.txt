@@ -1,0 +1,41 @@
+{
+  "orgName": "Scratch Org 2",
+  "edition": "Developer",
+  "features": [
+    "API",
+    "AuthorApex",
+    "Communities",
+    "DebugApex",
+    "Interaction",
+    "LightningSalesConsole",
+    "LightningServiceConsole",
+    "Multicurrency",
+    "PlatformEncryption",
+    "ProcessBuilder",
+    "RecordTypes",
+    "SalesUser",
+    "ServiceCloud",
+    "Sites",
+    "StateAndCountryPicklist",
+    "Workflow"
+  ],
+  "settings": {
+    "chatterSettings": {
+      "enableChatter": true
+    },
+    "communitiesSettings": {
+      "enableNetworksEnabled": true
+    },
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": true
+    }
+  },
+  "objectSettings": {
+    "opportunity": {
+      "sharingModel": "private"
+    }
+  }
+}

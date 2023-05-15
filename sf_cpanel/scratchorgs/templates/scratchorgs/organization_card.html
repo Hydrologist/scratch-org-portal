@@ -1,0 +1,62 @@
+<!-- This template is only meant to be used as part of the index template and for cards being created to be inserted into it. -->
+<div id="org-card-{{ organization.id }}" class="card">
+  <div class="card-content">
+    <span class="card-title"><a href="{{ organization.instance_url }}" target="_blank">{{ organization.instance_url }}</a></span>
+    <table>
+      <thead>
+        <tr>
+          <th>Organization Id</th>
+          <th>Created</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ organization.organization_id }}</td>
+          <td>{{ organization.created_date }}</td>
+          <td>{{ organization.created_date|timesince }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-action">
+    <div class="center-align">
+      <a target="_blank" class="activator waves-effect waves-light btn">User List</a>
+      <a class="waves-effect waves-light btn modal-trigger delete-button" href="#delete-modal" data-value="{{ organization.id }}">Delete</a>
+    </div>
+  </div>
+  <div class="card-reveal">
+    <span class="card-title">Users<i class="material-icons right">close</i></span>
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Password</th>
+          <th>Log In</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in organization.salesforceuser_set.all %}
+          <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.password }}</td>
+            <td>
+              <button class="btn waves-effect waves-light login-button" data-value="{{ user.id }}">Log In</button>
+              <div class="preloader-wrapper small active login-spinner hide">
+                <div class="spinner-layer spinner-green-only">
+                  <div class="circle-clipper left">
+                    <div class="circle"></div>
+                  </div><div class="gap-patch">
+                    <div class="circle"></div>
+                  </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

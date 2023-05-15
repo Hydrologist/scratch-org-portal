@@ -1,0 +1,45 @@
+{% extends "scratchorgs/base.html" %}
+
+{% block title %}Scratch Orgs - Index{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!--div class="content-loader">
+    <div class="row">
+      <div class="col s12 center-align">
+        <div class="progress">
+        <div class="indeterminate"></div>
+        </div>
+      </div>
+    </div>
+  </div-->
+  <div class="title center-align">
+    <h2>Manage Scratch Orgs</h2>
+    <a class="btn waves-effect waves-light">Log Out</a>
+  </div>
+  <div class="org-list">
+    {% if organization_list %}
+      {% for organization in organization_list %}
+        {% include "scratchorg/organization_card.html" %}
+      {% endfor %}
+    {% else %}
+      <div class="center-align">
+        <h4>No organizations are available.</h4>
+        <button id="create-button" data-target="create-modal" class="center-align waves-effect waves-light btn modal-trigger">Create a Scratch Org</a>
+      </div>
+    {% endif %}
+  </div>
+  <div id="create-modal" class="modal">
+    <div class="modal-content input-field">
+      <p>Please enter the scratch org's name.</p>
+      <form action="/create-org/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button id="create-button" class="btn waves-effect waves-light" type="submit">Submit
+          <i class="material-icons right">send</i>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
