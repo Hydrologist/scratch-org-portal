@@ -6,6 +6,8 @@ import tempfile
 
 from . import auth_url, utils
 
+from .models import Organization, SalesforceUser
+
 default_config = {
     "orgName": "Scratch Org",
     "edition": "Developer",
@@ -23,11 +25,16 @@ default_config = {
         "RecordTypes",
         "SalesUser",
         "ServiceCloud",
-        "SiteDotCom",
         "Sites",
         "StateAndCountryPicklist",
         "Workflow"
     ],
+    "namespace": "KGRenewal",
+    "objectSettings": {
+        "opportunity": {
+            "sharingModel": "private"
+        }
+    },
     "settings": {
         "chatterSettings": {
             "enableChatter": True,
@@ -41,11 +48,6 @@ default_config = {
         "mobileSettings": {
             "enableS1EncryptedStoragePref2": True
         }
-    },
-    "objectSettings": {
-        "opportunity": {
-            "sharingModel": "private"
-        }
     }
 }
 
@@ -54,15 +56,15 @@ def sf_run(command, key_list:list=[], use_json=True) -> dict:
     if use_json or len(key_list) != 0:
         command = command + ' --json'
     result = utils.run('sf ' + command)
-
-    if use_json and len(key_list) == 0:
-        return result
     
     # Parse JSON response
     if len(result['stderr']) > 0:
         return {'status': 1, 'result': result['stderr']}
-    data = json.loads(result['stdout'])
-    
+    if use_json:
+        data = json.loads(result['stdout'])
+    else:
+        data = result['stdout']
+
     # Return data if we are not looking for a particular key or we
     # received an error.
     if len(key_list) == 0 or data['status'] != 0:
@@ -102,20 +104,22 @@ def authenticate(username:str, key_file:str, client_id:str):
             return e
 
 def get_org_list() -> dict:
-    data = sf_run('org list')
-    return data['result']
-
-def get_org_url(target:str) -> dict:
-    data = sf_run('org open -r -u ' + target, [])
-    return data
+    return sf_run('org list')
 
 def get_org_info(username: str) -> dict:
-    data = sf_run('org display -o {}'.format(username))
-    return data
+    return sf_run('org display -o "{}"'.format(username))
 
 def get_user_info(username:str) -> dict:
-    data = sf_run('org display user -o {}'.format(username))
-    return data
+    return sf_run('org display user -o "{}"'.format(username))
+
+def generate_user_password(username:str) -> dict:
+    return sf_run('org generate password -o "{}"'.format(username))
+
+def get_login_url(username:str) -> dict:
+    return sf_run('org open -o "{}" -r'.format(username))
+
+def delete_org(alias:str) -> dict:
+    return sf_run('org delete scratch -o "{}" -p'.format(alias))
 
 def create_scratch_org(alias:str) -> dict:
     config_json = json.dumps(default_config)
@@ -128,11 +132,10 @@ def create_scratch_org(alias:str) -> dict:
                                     get_username(), alias, alias)
         
         result = sf_run(create_command)
-        print(json.dumps(result))
+        if result['status'] != 0:
+            return {'status': result['status'], 'data': result['name'] + ': ' + result['message'] + '\n\nActions: ' + result['actions']}
 
-        org_info = json.loads(result['stdout'])
-
-        return org_info['username']
+        return result
 
 def sfdx_test():
     return str(authenticate(auth_url.get_username(), auth_url.get_key_file_path(), auth_url.get_consumer_key()))

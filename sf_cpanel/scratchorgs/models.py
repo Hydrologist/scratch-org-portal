@@ -2,20 +2,22 @@ from django.db import models
 from django.utils import timezone
 
 class Organization(models.Model):
-    access_token = models.CharField(max_length=200)
-    access_url = models.URLField(max_length=250)
+    access_token = models.CharField(max_length=200, default='')
+    access_url = models.URLField(max_length=250, default='')
     alias = models.CharField(max_length=100, blank=True, default='')
     created_date = models.DateTimeField(auto_now_add=True)
     dev_hub = models.ForeignKey(
         'self',
         on_delete=models.CASCADE,
+        null=True
     )
     is_dev_hub = models.BooleanField(default=False)
-    expiration_date = models.DateTimeField()
+    expiration_date = models.DateTimeField(null=True)
     expired_flag = models.BooleanField(default=False)
     instance_url = models.URLField(max_length=200)
     last_modified = models.DateTimeField(auto_now=True)
-    login_url = models.URLField(max_length=100)
+    login_url = models.URLField(max_length=100, default='')
+    namespace = models.CharField(max_length=15, default='')
     organization_id = models.CharField(max_length=20)
     username = models.CharField(max_length=200, default='')
 
@@ -29,7 +31,7 @@ class Organization(models.Model):
 
     @property
     def is_expired(self):
-        return self.expired_flag is True or timezone.now() > self.expiration_date
+        return self.expired_flag is True or (self.expiration_date is not None and timezone.now() > self.expiration_date)
 
     def __str__(self):
         return self.alias
