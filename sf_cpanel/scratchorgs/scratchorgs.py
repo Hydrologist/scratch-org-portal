@@ -58,7 +58,7 @@ def sf_run(command, key_list:list=[], use_json=True) -> dict:
     result = utils.run('sf ' + command)
     
     # Parse JSON response
-    if len(result['stderr']) > 0:
+    if len(result['stderr']) > 1: # sf returns a status of 1 for warnings, including new version warnings
         return {'status': 1, 'result': result['stderr']}
     if use_json:
         data = json.loads(result['stdout'])

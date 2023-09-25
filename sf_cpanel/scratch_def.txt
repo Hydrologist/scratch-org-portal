@@ -1,5 +1,5 @@
 {
-  "orgName": "Scratch Org 2",
+  "orgName": "Scratch Org",
   "edition": "Developer",
   "features": [
     "API",
@@ -9,7 +9,6 @@
     "Interaction",
     "LightningSalesConsole",
     "LightningServiceConsole",
-    "Multicurrency",
     "PlatformEncryption",
     "ProcessBuilder",
     "RecordTypes",

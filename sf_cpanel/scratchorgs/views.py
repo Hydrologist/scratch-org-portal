@@ -11,7 +11,7 @@ from .forms import CreateOrgForm
 from . import scratchorgs
 
 # Create your views here.
-@login_required(login_url=reverse_lazy('scratchorgs:login'))
+#@login_required(login_url=reverse_lazy('scratchorgs:login'))
 def index(request):
     organization_list = Organization.objects.order_by('-created_date')
     template = loader.get_template('scratchorgs/index.html')
@@ -21,7 +21,7 @@ def index(request):
     }
     return HttpResponse(template.render(context, request))
 
-@login_required(login_url=reverse_lazy('scratchorgs:login'))
+#@login_required(login_url=reverse_lazy('scratchorgs:login'))
 def user_login(request, user_id):
     if request.method != 'GET':
         return HttpResponse(status=405, headers={'Allow': 'GET'})
@@ -34,7 +34,7 @@ def user_login(request, user_id):
 
     return HttpResponse(login_url, status=200)
 
-@login_required(login_url=reverse_lazy('scratchorgs:login'))
+#@login_required(login_url=reverse_lazy('scratchorgs:login'))
 def generate_password(request, user_id):
     if request.method != 'POST':
         return HttpResponse(status=405, headers={'Allow': 'POST'})
@@ -59,7 +59,7 @@ def generate_password(request, user_id):
     
     return HttpResponse(password, status=201)
 
-@login_required(login_url=reverse_lazy('scratchorgs:login'))
+#@login_required(login_url=reverse_lazy('scratchorgs:login'))
 def create_org(request):
     if request.method != 'POST':
         return HttpResponse(status=405, headers={'Allow': 'POST'})
@@ -104,7 +104,7 @@ def create_org(request):
 
     return HttpResponse(loader.render_to_string('scratchorgs/organization_card.html', context), status=201)
 
-@login_required(login_url=reverse_lazy('scratchorgs:login'))
+#@login_required(login_url=reverse_lazy('scratchorgs:login'))
 def delete_org(request, org_id):
     if request.method != 'POST':
         return HttpResponse(status=405, headers={'Allow': 'POST'})
